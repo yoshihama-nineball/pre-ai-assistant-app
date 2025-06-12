@@ -7,7 +7,6 @@ import React from 'react'
 export const metadata: Metadata = {
   title: 'プレAIアシスタントアプリ | TOP',
   description: 'AIアシスタントアプリのトップ画面です',
-  // icons設定を完全に削除
 }
 
 export default async function RootLayout({
