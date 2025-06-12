@@ -1,8 +1,5 @@
-
 const page = () => {
-  return (
-    <div>TOPページ!!!</div>
-  )
+  return <div>TOPページ!!!</div>
 }
 
 export default page
