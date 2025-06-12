@@ -3,17 +3,43 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "dev:api": "nodemon src/index.ts --api",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "format": "prettier --write \"**/*.{js,ts,jsx,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,jsx,tsx,json,md}\"",
+    "lint": "eslint src/**/*.{ts,tsx,js}",
+    "lint:fix": "eslint src/**/*.{ts,tsx,js} --fix",
+    "fix": "yarn lint:fix && yarn format",
+    "test": "jest",
+    "coverage": "jest --coverage"
+  },
   "dependencies": {
     "axios": "^1.9.0",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "morgan": "^1.10.0",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jest": "^29.5.14",
+    "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "jest": "^30.0.0",
     "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
