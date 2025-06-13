@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: 'frontend/yarn.lock'
+
+      - name: Install frontend dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./frontend
+
+      - name: Run frontend tests
+        run: yarn test
+        working-directory: ./frontend
+
+      - name: Build frontend
+        run: yarn build
+        working-directory: ./frontend
+
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: 'backend/yarn.lock'
+
+      - name: Install backend dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./backend
+
+      - name: Run backend tests
+        run: yarn test
+        working-directory: ./backend
+
+      - name: Build backend
+        run: yarn build
+        working-directory: ./backend
