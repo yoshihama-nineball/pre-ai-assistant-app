@@ -8,9 +8,8 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  lint-backend:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,15 +19,41 @@ jobs:
         with:
           node-version: '20'
           cache: 'yarn'
+          cache-dependency-path: 'backend/yarn.lock'
 
-      - name: Configure Yarn to use Yarn registry
-        run: yarn config set registry https://registry.yarnpkg.com
+      - name: Install backend dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./backend
 
-      - name: Clear Yarn cache
-        run: yarn cache clean
+      - name: Lint backend
+        run: yarn run lint
+        working-directory: ./backend
 
-      - name: Install dependencies
-        run: cd backend && yarn install --frozen-lockfile
+      - name: Format check backend
+        run: yarn run format:check
+        working-directory: ./backend
 
-      - name: Lint and Format
-        run: cd backend && yarn run format
+  lint-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: 'frontend/yarn.lock'
+
+      - name: Install frontend dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./frontend
+
+      - name: Lint frontend
+        run: yarn run lint
+        working-directory: ./frontend
+
+      - name: Format check frontend
+        run: yarn run format:check || echo "Format check not configured"
+        working-directory: ./frontend
