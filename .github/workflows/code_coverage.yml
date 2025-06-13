@@ -1,0 +1,56 @@
+name: Test and Coverage
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Configure Yarn to use Yarn registry
+        run: yarn config set registry https://registry.yarnpkg.com
+
+      - name: Clear Yarn cache
+        run: yarn cache clean
+
+      - name: Install dependencies
+        run: cd backend && yarn install --frozen-lockfile
+
+      - name: Debug environment variables
+        run: |
+          # TODO: mongoDBのMONGODB_URIとNODE_RNVを設定
+          echo "DATABASE_URL is set: ${{ secrets.DATABASE_URL != '' }}"
+          echo "NODE_ENV is set: ${{ secrets.NODE_ENV != '' }}"
+
+      - name: Set up database
+        run: |
+          cd backend && npx ts-node ./src/data --clear
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+
+      - name: Run tests with coverage
+        run: cd backend && yarn coverage
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage
