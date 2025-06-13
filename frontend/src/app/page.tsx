@@ -1,5 +1,10 @@
+"use client"
+import TestForm from "@/components/TestForm"
+
 const page = () => {
-  return <div>TOPページ!!!</div>
+  return <>
+   <TestForm />
+  </>
 }
 
 export default page

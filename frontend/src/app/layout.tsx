@@ -1,4 +1,5 @@
 import Loading from '@/components/feedback/Loading'
+import { ClientThemeProvider } from '@/components/layouts/ClientThemeProvider'
 import Footer from '@/components/layouts/Footer/Footer'
 import Header from '@/components/layouts/Header/Header'
 import type { Metadata } from 'next'
@@ -17,11 +18,13 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <Header />
-        <main>
-          <React.Suspense fallback={<Loading />}>{children}</React.Suspense>
-        </main>
-        <Footer />
+        <ClientThemeProvider>
+          <Header />
+          <main>
+            <React.Suspense fallback={<Loading />}>{children}</React.Suspense>
+          </main>
+          <Footer />
+        </ClientThemeProvider>
       </body>
     </html>
   )
