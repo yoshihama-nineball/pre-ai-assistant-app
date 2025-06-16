@@ -4,8 +4,7 @@ import express from 'express'
 import morgan from 'morgan'
 import 'reflect-metadata'
 import { db } from './config/db'
-// import authRouter from './routes/authRouter'
-// import budgetRouter from './routes/budgetRouter'
+import analyzeRouter from './routes/analyzeRouter'
 
 export async function connectDB() {
   try {
@@ -32,17 +31,15 @@ app.use(
 
 app.use(morgan('dev'))
 app.use(express.json())
-// app.use(limiter)
 
-app.get('/api/hello', (req, res) => {
-  res.status(200).json({ message: 'Hello, world!' })
-})
-
-// app.use('/api/budgets', budgetRouter)
-// app.use('/api/auth', authRouter)
+app.use('/api/analyze', analyzeRouter)
 
 app.get('/', (req, res) => {
   res.send('ユニットテストの動作確認')
+})
+
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello, world!' })
 })
 
 export default app
