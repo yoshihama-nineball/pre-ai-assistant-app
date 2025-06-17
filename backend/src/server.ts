@@ -1,6 +1,8 @@
+// src/server.ts
 import colors from 'colors'
 import cors from 'cors'
 import express from 'express'
+import session from 'express-session' // 追加
 import morgan from 'morgan'
 import 'reflect-metadata'
 import { db } from './config/db'
@@ -26,6 +28,19 @@ app.use(
       //TODO:  カスタムドメインがある場合ココに追加
     ],
     credentials: true,
+  })
+)
+
+// セッション設定を追加
+app.use(
+  session({
+    secret: 'anger-management-app-secret', // 本番環境では環境変数にする
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: false, // 開発環境はfalse、本番ではtrue
+      maxAge: 24 * 60 * 60 * 1000, // 24時間
+    },
   })
 )
 
