@@ -1,5 +1,7 @@
+import Anger from "@/components/anger/Anger"
+
 const AngerPage = () => {
-  return <>アンガーログページテスト</>
+  return <><Anger /></>
 }
 
 export default AngerPage
