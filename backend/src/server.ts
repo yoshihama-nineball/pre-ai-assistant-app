@@ -1,11 +1,12 @@
+// src/server.ts
 import colors from 'colors'
 import cors from 'cors'
 import express from 'express'
+import session from 'express-session' // 追加
 import morgan from 'morgan'
 import 'reflect-metadata'
 import { db } from './config/db'
-// import authRouter from './routes/authRouter'
-// import budgetRouter from './routes/budgetRouter'
+import analyzeRouter from './routes/analyzeRouter'
 
 export async function connectDB() {
   try {
@@ -30,19 +31,30 @@ app.use(
   })
 )
 
+// セッション設定を追加
+app.use(
+  session({
+    secret: 'anger-management-app-secret', // 本番環境では環境変数にする
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: false, // 開発環境はfalse、本番ではtrue
+      maxAge: 24 * 60 * 60 * 1000, // 24時間
+    },
+  })
+)
+
 app.use(morgan('dev'))
 app.use(express.json())
-// app.use(limiter)
 
-app.get('/api/hello', (req, res) => {
-  res.status(200).json({ message: 'Hello, world!' })
-})
-
-// app.use('/api/budgets', budgetRouter)
-// app.use('/api/auth', authRouter)
+app.use('/api/analyze', analyzeRouter)
 
 app.get('/', (req, res) => {
   res.send('ユニットテストの動作確認')
+})
+
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello, world!' })
 })
 
 export default app
