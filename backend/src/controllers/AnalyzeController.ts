@@ -1,4 +1,3 @@
-// src/controllers/AnalyzeController.ts
 import type { Request, Response } from 'express'
 import axios from 'axios'
 
