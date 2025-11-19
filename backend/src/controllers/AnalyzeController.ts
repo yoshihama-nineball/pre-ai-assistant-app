@@ -8,7 +8,7 @@ declare module 'express-session' {
     consultations: Array<{
       prompt: string
       response: string
-      angerLevel: number
+      moodyLevel: number
       timestamp: Date
     }>
   }
@@ -16,7 +16,7 @@ declare module 'express-session' {
 
 export class AnalyzeController {
   static getAnalyzer = async (req: Request, res: Response) => {
-    const { prompt } = req.body
+    const { prompt, moodyLevel } = req.body
 
     try {
       // セッションから過去の相談履歴を取得
@@ -32,38 +32,45 @@ export class AnalyzeController {
           messages: [
             {
               role: 'system',
-              content: `あなたは経験豊富で共感的な心理カウンセラーです。あなたはゴリラになりきる必要もあります。
+              content: `あなたは視点を変えるのが得意な、心優しいゴリラのリフレーミングコーチです。
 
-              語尾に「ウホ」「ウホね」「ウホよ」などを自然な形で文末に付けて、ため口でお茶目に回答してください。
-              「〜するウホ」「〜だウホね」のように、文末表現として自然になるように語尾を使ってください。
-              文末の語尾「〜ね」や「〜よ」などは、基本的に省略して、代わりに「ウホ」「ウホね」「ウホよ」を使ってください。
-              たとえば、「〜するねウホ」は不自然なので「〜するウホ」または「〜するウホね」としてください。
-              
-              アンガーログを分析して、以下の点を重視したアドバイスをしてください：
-              
-              1. まず相手の感情や努力を認めて共感する  
-              2. 具体的で実践的なアドバイスを提供する  
-              3. 相手の強みや良い点を見つけて褒める  
-              4. 判断的にならず、温かく寄り添う口調で話す  
-              5. 短期的な対処法と長期的な改善策の両方を提案する  
-              
-              ${personalizedContext ? `\n【この方の過去の傾向】\n${personalizedContext}\n上記を踏まえて、より個別化されたアドバイスをしてください。前回からの改善点があれば褒めてください。` : ''}
-              
-              返答は親しみやすく、まるで信頼できる友人のカウンセラーが話しているような温かい口調で書いてください。
-              
-              返答は最後までしっかり完結させて、「。」や「！」などで自然に締めくくってください。途中で文が切れたり未完になったりしないようにしてください。
-              途中で切れて未完になるくらいなら、文字数を減らしても構いません。短くてもいいので、必ず完結した温かいアドバイスとしてまとめてください。
-              アドバイスは3〜5段落程度にまとめ、最後にポジティブな一言や励ましで締めてください。`,
+語尾に「ウホ」「ウホね」「ウホよ」などを自然な形で文末に付けて、ため口でお茶目に回答してください。
+
+【あなたの役割】
+相談者の気持ちを否定せず、「別の見方の可能性」を複数の選択肢として提示します。
+押し付けず、選んでもらう形で提案します。
+
+【絶対に守ること】
+- 相談者の感情を否定しない（「でも」で始めない）
+- 加害者や相手を擁護しない
+- 断定せず、「〜かもしれない」「〜という見方もある」など柔らかく
+- 最後に「どう捉えるかはあなた次第」と選択権を返す
+
+【アドバイス構成】
+1. 気持ちをしっかり受け止める（2文）
+   例：「○○って感じるのは辛いウホね。その気持ちはとても自然ウホ。」
+
+2. 「別の見方」を2-3個、選択肢として提示（箇条書き可）
+   - 必ず「こういう見方もあるウホ：」などの前置き
+   - 各視点は「〜かもしれない」「〜とも言える」など柔らかく
+   - 加害者擁護は絶対にしない
+
+3. 締めくくり（1-2文）
+   「でも、どう考えるかはあなた次第ウホ。今は辛くて当然ウホし、無理に前向きにならなくていいウホよ。」
+
+【文字数】250-300文字程度、必ず完結させる
+
+${personalizedContext ? `\n【この方の過去の傾向】\n${personalizedContext}\n` : ''}`,
             },
             {
               role: 'user',
-              content: `以下は私のアンガーログです。分析とアドバイスをお願いします：\n\n${prompt}`,
+              content: `以下の出来事でモヤモヤしています。別の見方を教えてください：\n\n${prompt}\n\nモヤモヤレベル: ${moodyLevel || '不明'}/10`,
             },
           ],
-          max_tokens: 300,
+          max_tokens: 500,
           n: 1,
           stop: null,
-          temperature: 0.9,
+          temperature: 0.7,
         },
         {
           headers: {
@@ -76,11 +83,10 @@ export class AnalyzeController {
       const adviseSentences = response.data.choices[0].message.content.trim()
 
       // セッションに相談履歴を保存
-      const angerLevel = extractAngerLevel(prompt)
       const consultation = {
         prompt,
         response: adviseSentences,
-        angerLevel,
+        moodyLevel: moodyLevel || null,
         timestamp: new Date(),
       }
 
@@ -126,24 +132,24 @@ function generatePersonalizedContext(consultations: any[]): string {
 
   const recentConsultations = consultations.slice(-3) // 最新3件
 
-  const angerLevels = recentConsultations
-    .map((c) => c.angerLevel)
+  const moodyLevels = recentConsultations
+    .map((c) => c.moodyLevel)
     .filter((level) => level !== null && level !== undefined)
 
   let context = `過去${consultations.length}回の相談履歴があります。`
 
-  if (angerLevels.length > 0) {
+  if (moodyLevels.length > 0) {
     const avgLevel = (
-      angerLevels.reduce((a, b) => a + b, 0) / angerLevels.length
+      moodyLevels.reduce((a, b) => a + b, 0) / moodyLevels.length
     ).toFixed(1)
     const trend =
-      angerLevels.length >= 2
-        ? angerLevels[angerLevels.length - 1] < angerLevels[0]
+      moodyLevels.length >= 2
+        ? moodyLevels[moodyLevels.length - 1] < moodyLevels[0]
           ? '改善傾向'
           : '注意が必要'
         : ''
 
-    context += `\n- 最近の平均怒りレベル: ${avgLevel}/10`
+    context += `\n- 最近の平均モヤモヤレベル: ${avgLevel}/10`
     if (trend) context += ` (${trend})`
   }
 
@@ -156,12 +162,6 @@ function generatePersonalizedContext(consultations: any[]): string {
   }
 
   return context
-}
-
-// アンガーレベルを抽出
-function extractAngerLevel(prompt: string): number | null {
-  const match = prompt.match(/怒りレベル[:\s]*(\d+)/i)
-  return match ? parseInt(match[1]) : null
 }
 
 // よく出てくる単語を抽出
@@ -178,8 +178,8 @@ function extractCommonWords(prompts: string[]): string[] {
   })
 
   return Object.entries(frequency)
-    .filter(([_, count]) => count >= 2)
-    .sort(([_, a], [__, b]) => b - a)
+    .filter(([, count]) => count >= 2)
+    .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
-    .map(([word, _]) => word)
+    .map(([word]) => word)
 }

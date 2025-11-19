@@ -13,9 +13,9 @@ import {
 } from '@mui/material'
 import React, { useState } from 'react'
 
-const Anger = () => {
+const Reframing = () => {
   const [prompt, setPrompt] = useState('')
-  const [angerLevel, setAngerLevel] = useState(5)
+  const [moodyLevel, setMoodyLevel] = useState(5)
   const [advice, setAdvice] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -33,8 +33,6 @@ const Anger = () => {
     setAdvice('')
 
     try {
-      const promptWithLevel = `${prompt}\n怒りレベル: ${angerLevel}`
-
       const response = await fetch('http://localhost:5000/api/analyze', {
         method: 'POST',
         headers: {
@@ -42,7 +40,8 @@ const Anger = () => {
         },
         credentials: 'include', // セッション管理のため
         body: JSON.stringify({
-          prompt: promptWithLevel,
+          prompt: prompt,
+          moodyLevel: moodyLevel,
         }),
       })
 
@@ -62,7 +61,7 @@ const Anger = () => {
 
   const handleReset = () => {
     setPrompt('')
-    setAngerLevel(5)
+    setMoodyLevel(5)
     setAdvice('')
     setError('')
   }
@@ -70,7 +69,7 @@ const Anger = () => {
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom align="center">
-        🦍 ゴリ田先生のアンガーマネジメント相談 🔥
+        🦍 ゴリ田先生のリフレーミング相談 🔥
       </Typography>
 
       {sessionInfo && (
@@ -84,7 +83,7 @@ const Anger = () => {
       <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
         <form onSubmit={handleSubmit}>
           <Typography variant="h6" gutterBottom>
-            今日の怒りについて教えてください
+            今日のモヤモヤについて教えてください
           </Typography>
 
           <TextField
@@ -101,13 +100,13 @@ const Anger = () => {
 
           <FormControl fullWidth sx={{ mb: 3 }}>
             <FormLabel component="legend">
-              怒りレベル (1: 軽微 〜 10: 激怒)
+              モヤモヤレベル (1: 軽微 〜 10: 激怒)
             </FormLabel>
             <Box sx={{ px: 2 }}>
               <Slider
-                value={angerLevel}
-                onChange={(_, newValue) => setAngerLevel(newValue as number)}
-                aria-labelledby="anger-level-slider"
+                value={moodyLevel}
+                onChange={(_, newValue) => setMoodyLevel(newValue as number)}
+                aria-labelledby="moody-level-slider"
                 valueLabelDisplay="auto"
                 step={1}
                 marks
@@ -117,7 +116,7 @@ const Anger = () => {
               />
             </Box>
             <Typography variant="body2" color="text.secondary" align="center">
-              現在のレベル: {angerLevel}
+              現在のレベル: {moodyLevel}
             </Typography>
           </FormControl>
 
@@ -189,4 +188,4 @@ const Anger = () => {
   )
 }
 
-export default Anger
+export default Reframing

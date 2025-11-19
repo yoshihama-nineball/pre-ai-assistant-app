@@ -1,10 +1,11 @@
-"use client"
-import TestForm from "@/components/TestForm"
+import Reframing from '@/components/reframing/Reframing'
 
-const page = () => {
-  return <>
-   <TestForm />
-  </>
+const ReframingPage = () => {
+  return (
+    <>
+      <Reframing />
+    </>
+  )
 }
 
-export default page
+export default ReframingPage
