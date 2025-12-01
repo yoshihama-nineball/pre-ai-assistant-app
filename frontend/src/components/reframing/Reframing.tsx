@@ -69,7 +69,7 @@ const Reframing = () => {
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom align="center">
-        🦍 Dr.ゴリのリフレーミング相談 🔥
+        🦍 Dr.ゴリのリフレーミング相談室「みかた」🔥
       </Typography>
 
       {sessionInfo && (
