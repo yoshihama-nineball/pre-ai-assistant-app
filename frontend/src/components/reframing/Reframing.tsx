@@ -71,6 +71,9 @@ const Reframing = () => {
       <Typography variant="h4" component="h1" gutterBottom align="center">
         🦍 Dr.ゴリのリフレーミング相談室「みかた」🔥
       </Typography>
+      <Typography variant="h6" component="h6" gutterBottom align="center">
+        ものごとの「見かた」を変えることのできるあなたの「味方」です
+      </Typography>
 
       {sessionInfo && (
         <Alert severity="info" sx={{ mb: 3 }}>
