@@ -171,7 +171,7 @@ const Reframing = () => {
           }}
         >
           <Typography variant="h6" gutterBottom color="primary">
-            🦍 Dr.ゴリからのアドバイス
+            Dr.ゴリからのアドバイス
           </Typography>
           <Typography
             variant="body1"
