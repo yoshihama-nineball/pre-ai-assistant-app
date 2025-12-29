@@ -179,7 +179,7 @@ const Reframing = () => {
               lineHeight: 1.8,
               whiteSpace: 'pre-wrap', // 改行と自動折り返しを両方対応
               wordBreak: 'break-word', // 長い単語も適切に折り返し
-              overflowWrap: 'break-word', // より確実な折り返し
+              overflowWrap: 'break-word',
               width: '100%',
             }}
           >
