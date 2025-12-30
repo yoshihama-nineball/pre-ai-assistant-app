@@ -178,7 +178,7 @@ const Reframing = () => {
             sx={{
               lineHeight: 1.8,
               whiteSpace: 'pre-wrap', // 改行と自動折り返しを両方対応
-              wordBreak: 'break-word', // 長い単語も適切に折り返し
+              wordBreak: 'break-word',
               overflowWrap: 'break-word',
               width: '100%',
             }}
