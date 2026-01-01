@@ -177,7 +177,7 @@ const Reframing = () => {
             variant="body1"
             sx={{
               lineHeight: 1.8,
-              whiteSpace: 'pre-wrap', // 改行と自動折り返しを両方対応
+              whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
               overflowWrap: 'break-word',
               width: '100%',
