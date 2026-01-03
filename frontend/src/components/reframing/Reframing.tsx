@@ -103,7 +103,7 @@ const Reframing = () => {
 
           <FormControl fullWidth sx={{ mb: 3 }}>
             <FormLabel component="legend">
-              モヤモヤレベル (1: 軽微 〜 10: 激怒)
+              モヤモヤレベル (1: 軽微 〜 10: 非常に強い)
             </FormLabel>
             <Box sx={{ px: 2 }}>
               <Slider
