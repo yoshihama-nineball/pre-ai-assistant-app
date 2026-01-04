@@ -38,7 +38,7 @@ const Reframing = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // セッション管理のため
+        credentials: 'include',
         body: JSON.stringify({
           prompt: prompt,
           moodyLevel: moodyLevel,
