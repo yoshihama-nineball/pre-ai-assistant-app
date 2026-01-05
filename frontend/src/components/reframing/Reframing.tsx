@@ -134,7 +134,7 @@ const Reframing = () => {
               {loading ? (
                 <>
                   <CircularProgress size={20} sx={{ mr: 1 }} />
-                  分析中ウホ...
+                  分析中...
                 </>
               ) : (
                 'アドバイスをもらう'
