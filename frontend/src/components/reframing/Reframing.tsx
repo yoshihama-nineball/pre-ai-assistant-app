@@ -96,7 +96,7 @@ const Reframing = () => {
             label="何があったか詳しく教えてください"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="例：上司に意見を無視されて、他の人がその意見を言ったときに評価された..."
+            placeholder="例：上司に意見を無視されて、他の人がその意見を言ったときに評価された"
             sx={{ mb: 3 }}
             disabled={loading}
           />
