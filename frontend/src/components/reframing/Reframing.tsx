@@ -79,7 +79,7 @@ const Reframing = () => {
         <Alert severity="info" sx={{ mb: 3 }}>
           相談回数: {sessionInfo.totalConsultations}回目
           {sessionInfo.hasHistory &&
-            ' | 過去の相談履歴を考慮してアドバイスします'}
+            ' | 過去の相談履歴を考慮してアドバイスするウホ'}
         </Alert>
       )}
 
