@@ -72,7 +72,7 @@ const Reframing = () => {
         Dr.ゴリのリフレーミング相談室「みかた」
       </Typography>
       <Typography variant="h6" component="h6" gutterBottom align="center">
-        ものごとの「見かた」を変えることのできるあなたの「味方」です
+        ものごとの「見かた」を変えることのできるあなたの「味方」ウホ
       </Typography>
 
       {sessionInfo && (
